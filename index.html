@@ -88,20 +88,13 @@ var ROUNDS=[
   {q:'Which column of the lab notebook makes sense to average?',o:['Bench number','Flame colour','Mass (g)','Crystal quality'],a:[2],why:'Mass is a measured quantity, so averaging works. Bench number only <i>looks</i> like a number: it is a label.'}]},
  {id:'round-2',name:'Sort it',emoji:'🗂️',sub:'Nominal, ordinal, discrete or continuous?',chips:true,items:[
   {q:'pH of rainwater',o:TYPES,a:[3],why:'Measured on a continuous scale.'},
-  {q:'State at room temperature (solid, liquid, gas)',o:TYPES,a:[0],why:'Names with no order.'},
-  {q:'Number of carbon atoms in a molecule',o:TYPES,a:[2],why:'Counted in whole numbers.'},
   {q:'GHS hazard category 1–4',o:TYPES,a:[1],why:'Ordered categories with unequal gaps. (GHS = Globally Harmonized System.)'},
-  {q:'Boiling point (°C)',o:TYPES,a:[3],why:'Measured, so any value in a range is possible.'},
   {q:'Lab locker number',o:TYPES,a:[0],why:'Trap! A number used as a name is nominal.'},
-  {q:'Drops of indicator added',o:TYPES,a:[2],why:'You count drops: discrete.'},
-  {q:'Smell: none, faint, strong',o:TYPES,a:[1],why:'Ordered categories: ordinal.'}]},
+  {q:'Drops of indicator added',o:TYPES,a:[2],why:'You count drops: discrete.'}]},
  {id:'round-3',name:'Pick the graph',emoji:'📊',sub:'Which graph fits best?',items:[
   {q:'Share of each solvent used in the teaching lab this year',o:GRAPHS,a:[0,1],why:'Nominal categories that make up one whole: a bar chart or a pie chart.'},
   {q:'pH of 40 rainwater samples from around campus',o:GRAPHS,a:[2],why:'One continuous variable: show its shape with a histogram or box plot.'},
-  {q:'Absorbance of 6 standards against concentration',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot (with a fitted line).'},
-  {q:'Temperature of a reaction mixture every 30 s',o:GRAPHS,a:[4],why:'A quantity changing over time: a line graph.'},
-  {q:'Hazard categories of 50 chemicals in the store room',o:GRAPHS,a:[0],why:'Ordinal categories: a bar chart, with bars kept in category order.'},
-  {q:'Yields of two synthesis routes, 20 runs each',o:GRAPHS,a:[5],why:'Comparing a continuous variable between groups: side-by-side box plots.'}]},
+  {q:'Absorbance of 6 standards against concentration',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot (with a fitted line).'}]},
  {id:'round-4',name:'Spot the trick',emoji:'🕵️',sub:'The silver nitrate advert',items:[
   {q:'Brand B (99.1% pure) claims to be “over 3× purer” than Brand A (98.6%). Its bar is 3.5× taller. Convinced?',o:['Yes: the bar is much taller','No: the axis does not start at zero','Can’t tell without the price'],a:[1],why:'The axis starts at 98.4%, so a 0.5-point gap looks huge. Bar charts must start at zero.'}]},
  {id:'round-5',name:'Typo demo',emoji:'⚡',sub:'Predict before it moves!',items:[
@@ -109,18 +102,12 @@ var ROUNDS=[
  {id:'round-6',name:'Your turn',emoji:'🔍',sub:'Aspirin melting points (°C)',data:[134,135,135,136,133,135,128],items:[
   {num:true,q:'Mean (to 1 decimal place)',ans:133.7,tol:0.06,why:'Sum = 936, so 936 ÷ 7 = 133.7 °C.'},
   {num:true,q:'Median',ans:135,tol:0.01,why:'Sorted: 128, 133, 134, <b>135</b>, 135, 135, 136. The 4th value is 135 °C.'},
-  {num:true,q:'Mode',ans:135,tol:0.01,why:'135 °C appears three times.'},
-  {num:true,q:'Range',ans:8,tol:0.01,why:'136 − 128 = 8 °C.'},
   {q:'Which single number would you report?',o:['Mean, 133.7 °C','Median, 135 °C','Range, 8 °C'],a:[1],why:'The low 128 °C reading (likely an impure crystal) drags the mean down; the median resists it.'}]},
  {id:'round-7',name:'Case files',emoji:'🗂️',sub:'Group challenge: type → graph → summary',items:[
-  {q:'Case A: caffeine in 12 energy drinks (80 to 300 mg). What type of data?',o:TYPES,a:[3],why:'Measured amounts: continuous. A few very strong drinks make it skewed right.'},
-  {q:'Case A: which summary fits best?',o:['Mean, 135 mg','Median, 112.5 mg, with the IQR','Mode, 80 mg'],a:[1],why:'The 300 mg can drags the mean up; the median and IQR resist it.'},
-  {q:'Case B: endpoint colour (colourless, pale pink, deep magenta). What type of data?',o:TYPES,a:[1],why:'The colours are in order (undershot → ideal → overshot), so ordinal.'},
-  {q:'Case B: which graph?',o:['Bar chart, bars kept in order','Histogram','Scatter plot','Line graph'],a:[0],why:'Ordinal categories: a bar chart in their natural order.'},
-  {q:'Case C: yield of 8 runs at temperatures from 40 to 75 °C. Which graph?',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot with temperature on the x-axis.'}]},
- {id:'round-8',name:'Exit ticket',emoji:'🎟️',sub:'Three questions before you leave',items:[
+  {q:'Case A: caffeine in 12 energy drinks (80 to 300 mg). Which summary fits best?',o:['Mean, 135 mg','Median, 112.5 mg, with the IQR','Mode, 80 mg'],a:[1],why:'The 300 mg can drags the mean up; the median and IQR resist it.'},
+  {q:'Case B: yield of 8 runs at temperatures from 40 to 75 °C. Which graph?',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot with temperature on the x-axis.'}]},
+ {id:'round-8',name:'Exit ticket',emoji:'🎟️',sub:'Two questions before you leave',items:[
   {q:'You record the colour of the precipitate in 40 tests. Best graph and summary?',o:['Histogram and mean','Bar chart and mode','Scatter plot and median','Line graph and range'],a:[1],why:'Colour is nominal: count categories with a bar chart, summarise with the mode or percentages.'},
-  {q:'Boiling points of 25 samples; a few impure ones are much lower. Which summary?',o:['Mean','Median','Range'],a:[1],why:'Skewed data: the median is not dragged by the low tail.'},
   {q:'Fume hoods are numbered 1 to 12. Is “the average hood number” meaningful?',o:['Yes, it is 6.5','No: hood number is nominal','Only if you round it'],a:[1],why:'Hood numbers are labels; their average means nothing.'}]}
 ];
 var COLORS=['--A','--B','--C','--D','--E','--A'];
