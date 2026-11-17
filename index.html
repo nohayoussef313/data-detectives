@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Detectives: Answer Pad</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{
+  --ink:#1E1B3A; --cream:#FFF9F0; --body:#4A4566;
+  --A:#5F3DC4; --B:#C2410C; --C:#087F5B; --D:#C2255C; --E:#1864AB;
+  --sun:#FFD166; --lilac:#ECE3FF; --peach:#FFE6D5; --mint:#D8F5E8; --sky:#DCEBFF; --pink:#FFE0EC;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);background:var(--cream);
+  background-image:radial-gradient(circle at 10% 0%,#FFE6D5 0,transparent 40%),radial-gradient(circle at 100% 30%,#ECE3FF 0,transparent 45%),radial-gradient(circle at 0% 100%,#D8F5E8 0,transparent 45%);
+  min-height:100vh}
+header{padding:18px 18px 8px;max-width:640px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{font-family:'Fredoka',sans-serif;font-size:26px;margin:0;line-height:1.1}
+h1 span{color:var(--A)}
+.score{font-family:'Fredoka',sans-serif;font-weight:600;background:var(--ink);color:var(--sun);padding:8px 14px;border-radius:999px;font-size:17px;white-space:nowrap}
+.sub{color:var(--body);font-size:15px;margin:6px 0 0}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 18px 10px;max-width:640px;margin:0 auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:0;border-radius:999px;padding:10px 14px;font:700 15px 'Nunito',sans-serif;background:#fff;color:var(--ink);box-shadow:0 2px 0 rgba(30,27,58,.12);cursor:pointer}
+nav button.on{background:var(--ink);color:#fff}
+nav button .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--C);margin-left:6px;vertical-align:middle}
+main{max-width:640px;margin:0 auto;padding:4px 18px 60px}
+.round-head{display:flex;align-items:center;gap:12px;margin:8px 0 14px}
+.emoji{font-size:40px;line-height:1}
+.round-head h2{font-family:'Fredoka',sans-serif;font-size:28px;margin:0}
+.round-head p{margin:2px 0 0;color:var(--body);font-size:15px}
+.q{background:#fff;border-radius:22px;padding:18px;margin:0 0 16px;box-shadow:0 4px 0 rgba(30,27,58,.08)}
+.q:nth-child(5n+1){background:#fff}
+.qt{font-weight:800;font-size:18px;margin:0 0 12px;line-height:1.35}
+.qn{font-family:'Fredoka',sans-serif;color:var(--A);font-size:14px;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px;font-weight:600}
+.opts{display:grid;gap:10px}
+.opts.chips{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid transparent;border-radius:16px;padding:12px 14px;font:700 16px 'Nunito',sans-serif;color:var(--ink);cursor:pointer;background:var(--lilac)}
+.opt .L{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:'Fredoka',sans-serif;font-size:18px}
+.opt.sel{border-color:var(--ink);transform:translateY(-1px);box-shadow:0 3px 0 var(--ink)}
+.opt.right{border-color:var(--C);background:var(--mint)}
+.opt.wrong{border-color:var(--B);background:var(--peach)}
+.row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:14px;padding:12px 16px;font:800 15px 'Nunito',sans-serif;cursor:pointer}
+.btn.show{background:var(--sun);color:var(--ink)}
+.btn.check{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.fb{margin-top:12px;padding:12px 14px;border-radius:14px;font-size:15px;line-height:1.45;display:none}
+.fb.ok{display:block;background:var(--mint)}
+.fb.no{display:block;background:var(--peach)}
+.fb b{font-size:16px}
+.num{display:flex;gap:10px;align-items:center}
+.num input{flex:1;min-width:0;font:700 20px 'Nunito',sans-serif;padding:12px 14px;border-radius:14px;border:3px solid var(--lilac);background:#fff;color:var(--ink)}
+.num input:focus{outline:none;border-color:var(--A)}
+.chipsdata{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.chipsdata span{background:var(--sun);border-radius:12px;padding:8px 12px;font:700 18px 'Fredoka',sans-serif}
+.next{display:block;width:100%;margin-top:6px;background:var(--A);color:#fff;font-family:'Fredoka',sans-serif;font-size:20px;padding:16px;border-radius:18px;border:0;cursor:pointer}
+.done{text-align:center;font-family:'Fredoka',sans-serif;font-size:22px;padding:20px;background:var(--sun);border-radius:22px}
+#card{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#fff;text-align:center;padding:24px;z-index:9;cursor:pointer}
+#card.on{display:flex;animation:pop .25s ease-out}
+#card .big{font-family:'Fredoka',sans-serif;font-size:min(46vw,260px);line-height:1}
+#card .txt{font-size:24px;font-weight:800;max-width:520px}
+#card .hint{font-size:15px;opacity:.85}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.burst{position:fixed;pointer-events:none;font-size:28px;animation:fly 900ms ease-out forwards;z-index:10}
+@keyframes fly{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.burst{display:none}#card.on{animation:none}}
+footer{max-width:640px;margin:0 auto;padding:0 18px 30px;color:var(--body);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><h1>Data <span>Detectives</span> 🔍</h1><div class="score" id="score">⭐ 0</div></div>
+  <p class="sub">Answer the round your lecturer is on. Tap <b>Show the class</b> and hold your phone up high!</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer>Your answers stay on this phone only; nothing is sent anywhere. All lab data are made up for practice.</footer>
+<div id="card" role="dialog" aria-modal="true"><div class="big" id="cardL"></div><div class="txt" id="cardT"></div><div class="hint">Hold it up! Tap anywhere to close.</div></div>
+<script>
+var TYPES=['Nominal','Ordinal','Discrete','Continuous'];
+var GRAPHS=['Bar chart','Pie chart','Histogram or box plot','Scatter plot','Line graph','Side-by-side box plots'];
+var ROUNDS=[
+ {id:'round-1',name:'Warm-up',emoji:'🧪',sub:'The mystery-salt lab notebook',items:[
+  {q:'Which column of the lab notebook makes sense to average?',o:['Bench number','Flame colour','Mass (g)','Crystal quality'],a:[2],why:'Mass is a measured quantity, so averaging works. Bench number only <i>looks</i> like a number: it is a label.'}]},
+ {id:'round-2',name:'Sort it',emoji:'🗂️',sub:'Nominal, ordinal, discrete or continuous?',chips:true,items:[
+  {q:'pH of rainwater',o:TYPES,a:[3],why:'Measured on a continuous scale.'},
+  {q:'State at room temperature (solid, liquid, gas)',o:TYPES,a:[0],why:'Names with no order.'},
+  {q:'Number of carbon atoms in a molecule',o:TYPES,a:[2],why:'Counted in whole numbers.'},
+  {q:'GHS hazard category 1–4',o:TYPES,a:[1],why:'Ordered categories with unequal gaps. (GHS = Globally Harmonized System.)'},
+  {q:'Boiling point (°C)',o:TYPES,a:[3],why:'Measured, so any value in a range is possible.'},
+  {q:'Lab locker number',o:TYPES,a:[0],why:'Trap! A number used as a name is nominal.'},
+  {q:'Drops of indicator added',o:TYPES,a:[2],why:'You count drops: discrete.'},
+  {q:'Smell: none, faint, strong',o:TYPES,a:[1],why:'Ordered categories: ordinal.'}]},
+ {id:'round-3',name:'Pick the graph',emoji:'📊',sub:'Which graph fits best?',items:[
+  {q:'Share of each solvent used in the teaching lab this year',o:GRAPHS,a:[0,1],why:'Nominal categories that make up one whole: a bar chart or a pie chart.'},
+  {q:'pH of 40 rainwater samples from around campus',o:GRAPHS,a:[2],why:'One continuous variable: show its shape with a histogram or box plot.'},
+  {q:'Absorbance of 6 standards against concentration',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot (with a fitted line).'},
+  {q:'Temperature of a reaction mixture every 30 s',o:GRAPHS,a:[4],why:'A quantity changing over time: a line graph.'},
+  {q:'Hazard categories of 50 chemicals in the store room',o:GRAPHS,a:[0],why:'Ordinal categories: a bar chart, with bars kept in category order.'},
+  {q:'Yields of two synthesis routes, 20 runs each',o:GRAPHS,a:[5],why:'Comparing a continuous variable between groups: side-by-side box plots.'}]},
+ {id:'round-4',name:'Spot the trick',emoji:'🕵️',sub:'The silver nitrate advert',items:[
+  {q:'Brand B (99.1% pure) claims to be “over 3× purer” than Brand A (98.6%). Its bar is 3.5× taller. Convinced?',o:['Yes: the bar is much taller','No: the axis does not start at zero','Can’t tell without the price'],a:[1],why:'The axis starts at 98.4%, so a 0.5-point gap looks huge. Bar charts must start at zero.'}]},
+ {id:'round-5',name:'Typo demo',emoji:'⚡',sub:'Predict before it moves!',items:[
+  {q:'Five melting points: 121, 122, 122, 123, 125 °C. Then 125 is mistyped as 152. Which marker moves?',o:['The mean','The median','Both','Neither'],a:[0],why:'Mean: 122.6 → 128.0 °C. Median: stays at 122 °C. The median resists outliers.'}]},
+ {id:'round-6',name:'Your turn',emoji:'🔍',sub:'Aspirin melting points (°C)',data:[134,135,135,136,133,135,128],items:[
+  {num:true,q:'Mean (to 1 decimal place)',ans:133.7,tol:0.06,why:'Sum = 936, so 936 ÷ 7 = 133.7 °C.'},
+  {num:true,q:'Median',ans:135,tol:0.01,why:'Sorted: 128, 133, 134, <b>135</b>, 135, 135, 136. The 4th value is 135 °C.'},
+  {num:true,q:'Mode',ans:135,tol:0.01,why:'135 °C appears three times.'},
+  {num:true,q:'Range',ans:8,tol:0.01,why:'136 − 128 = 8 °C.'},
+  {q:'Which single number would you report?',o:['Mean, 133.7 °C','Median, 135 °C','Range, 8 °C'],a:[1],why:'The low 128 °C reading (likely an impure crystal) drags the mean down; the median resists it.'}]},
+ {id:'round-7',name:'Case files',emoji:'🗂️',sub:'Group challenge: type → graph → summary',items:[
+  {q:'Case A: caffeine in 12 energy drinks (80 to 300 mg). What type of data?',o:TYPES,a:[3],why:'Measured amounts: continuous. A few very strong drinks make it skewed right.'},
+  {q:'Case A: which summary fits best?',o:['Mean, 135 mg','Median, 112.5 mg, with the IQR','Mode, 80 mg'],a:[1],why:'The 300 mg can drags the mean up; the median and IQR resist it.'},
+  {q:'Case B: endpoint colour (colourless, pale pink, deep magenta). What type of data?',o:TYPES,a:[1],why:'The colours are in order (undershot → ideal → overshot), so ordinal.'},
+  {q:'Case B: which graph?',o:['Bar chart, bars kept in order','Histogram','Scatter plot','Line graph'],a:[0],why:'Ordinal categories: a bar chart in their natural order.'},
+  {q:'Case C: yield of 8 runs at temperatures from 40 to 75 °C. Which graph?',o:GRAPHS,a:[3],why:'Two numerical variables: a scatter plot with temperature on the x-axis.'}]},
+ {id:'round-8',name:'Exit ticket',emoji:'🎟️',sub:'Three questions before you leave',items:[
+  {q:'You record the colour of the precipitate in 40 tests. Best graph and summary?',o:['Histogram and mean','Bar chart and mode','Scatter plot and median','Line graph and range'],a:[1],why:'Colour is nominal: count categories with a bar chart, summarise with the mode or percentages.'},
+  {q:'Boiling points of 25 samples; a few impure ones are much lower. Which summary?',o:['Mean','Median','Range'],a:[1],why:'Skewed data: the median is not dragged by the low tail.'},
+  {q:'Fume hoods are numbered 1 to 12. Is “the average hood number” meaningful?',o:['Yes, it is 6.5','No: hood number is nominal','Only if you round it'],a:[1],why:'Hood numbers are labels; their average means nothing.'}]}
+];
+var COLORS=['--A','--B','--C','--D','--E','--A'];
+var LETTERS='ABCDEF';
+var state={};try{state=JSON.parse(localStorage.getItem('dd-answers')||'{}')||{}}catch(e){state={}}
+function save(){try{localStorage.setItem('dd-answers',JSON.stringify(state))}catch(e){}}
+function col(i){return getComputedStyle(document.documentElement).getPropertyValue(COLORS[i%COLORS.length]).trim()}
+function key(r,i){return r+'/'+i}
+function score(){var s=0,t=0;ROUNDS.forEach(function(R){R.items.forEach(function(it,i){t++;var st=state[key(R.id,i)];if(st&&st.ok)s++})});document.getElementById('score').textContent='⭐ '+s+' / '+t}
+function roundDone(R){return R.items.every(function(it,i){var st=state[key(R.id,i)];return st&&st.checked})}
+function nav(cur){var n=document.getElementById('nav');n.innerHTML='';ROUNDS.forEach(function(R,ix){var b=document.createElement('button');b.textContent=R.emoji+' '+(ix+1)+'. '+R.name;if(roundDone(R)){var d=document.createElement('span');d.className='dot';b.appendChild(d)}if(R.id===cur)b.className='on';b.onclick=function(){location.hash=R.id};n.appendChild(b)});var on=n.querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
+function burst(x,y){var e=['⭐','🎉','🧪','✨'];for(var i=0;i<10;i++){var s=document.createElement('span');s.className='burst';s.textContent=e[i%e.length];s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--dx',(Math.random()*240-120)+'px');s.style.setProperty('--dy',(-60-Math.random()*160)+'px');document.body.appendChild(s);setTimeout(function(n){return function(){n.remove()}}(s),950)}}
+function showCard(i,text){var c=document.getElementById('card');c.style.background=col(i);document.getElementById('cardL').textContent=LETTERS[i];document.getElementById('cardT').textContent=text;c.className='on'}
+document.getElementById('card').onclick=function(){this.className=''};
+function render(){
+ var id=(location.hash||'').slice(1);var R=ROUNDS.filter(function(r){return r.id===id})[0]||ROUNDS[0];
+ nav(R.id);var m=document.getElementById('main');m.innerHTML='';
+ var h=document.createElement('div');h.className='round-head';h.innerHTML='<div class="emoji">'+R.emoji+'</div><div><h2>'+R.name+'</h2><p>'+R.sub+'</p></div>';m.appendChild(h);
+ if(R.data){var dd=document.createElement('div');dd.className='chipsdata';R.data.forEach(function(v){var s=document.createElement('span');s.textContent=v;dd.appendChild(s)});m.appendChild(dd)}
+ R.items.forEach(function(it,i){
+  var k=key(R.id,i),st=state[k]||(state[k]={});
+  var q=document.createElement('div');q.className='q';
+  q.innerHTML=(R.items.length>1?'<p class="qn">Question '+(i+1)+'</p>':'')+'<p class="qt"></p>';q.querySelector('.qt').textContent=it.q;
+  var fb=document.createElement('div');fb.className='fb';
+  function showFb(){if(!st.checked)return;fb.className='fb '+(st.ok?'ok':'no');fb.innerHTML='<b>'+(st.ok?'✅ Correct!':'🤔 Not quite.')+'</b> '+it.why}
+  if(it.num){
+   var w=document.createElement('div');w.className='num';var inp=document.createElement('input');inp.inputMode='decimal';inp.placeholder='Type a number';if(st.v!=null)inp.value=st.v;
+   var b=document.createElement('button');b.className='btn check';b.textContent='Check';
+   b.onclick=function(ev){var v=parseFloat(String(inp.value).replace(',','.'));if(isNaN(v))return;st.v=inp.value;st.checked=true;st.ok=Math.abs(v-it.ans)<=it.tol;save();score();showFb();nav(R.id);if(st.ok)burst(ev.clientX,ev.clientY)};
+   w.appendChild(inp);w.appendChild(b);q.appendChild(w);
+  }else{
+   var o=document.createElement('div');o.className='opts'+(R.chips?' chips':'');var btns=[];
+   it.o.forEach(function(t,j){var b=document.createElement('button');b.className='opt';b.innerHTML='<span class="L"></span><span></span>';b.firstChild.textContent=LETTERS[j];b.firstChild.style.background=col(j);b.lastChild.textContent=t;
+    b.onclick=function(){if(st.checked)return;st.sel=j;save();paint()};btns.push(b);o.appendChild(b)});
+   q.appendChild(o);
+   var row=document.createElement('div');row.className='row';
+   var sh=document.createElement('button');sh.className='btn show';sh.textContent='📣 Show the class';
+   sh.onclick=function(){if(st.sel==null)return;showCard(st.sel,it.o[st.sel])};
+   var ck=document.createElement('button');ck.className='btn check';ck.textContent='✔ Check my answer';
+   ck.onclick=function(ev){if(st.sel==null||st.checked)return;st.checked=true;st.ok=it.a.indexOf(st.sel)>=0;save();score();paint();showFb();nav(R.id);if(st.ok)burst(ev.clientX,ev.clientY)};
+   row.appendChild(sh);row.appendChild(ck);q.appendChild(row);
+   function paint(){btns.forEach(function(b,j){b.className='opt'+(st.sel===j?' sel':'');if(st.checked){if(it.a.indexOf(j)>=0)b.className='opt right';else if(st.sel===j)b.className='opt wrong'}});sh.disabled=st.sel==null;ck.disabled=st.sel==null||st.checked}
+   paint();
+  }
+  q.appendChild(fb);showFb();m.appendChild(q);
+ });
+ var ix=ROUNDS.indexOf(R);
+ if(ix<ROUNDS.length-1){var nx=document.createElement('button');nx.className='next';nx.textContent='Next round: '+ROUNDS[ix+1].emoji+' '+ROUNDS[ix+1].name+' →';nx.onclick=function(){location.hash=ROUNDS[ix+1].id;window.scrollTo(0,0)};m.appendChild(nx)}
+ else{var dn=document.createElement('div');dn.className='done';dn.textContent='🎉 Case closed, detective! Show your lecturer your ⭐ score.';m.appendChild(dn)}
+ score();
+}
+window.addEventListener('hashchange',function(){render();window.scrollTo(0,0)});
+render();
+</script>
+</body>
+</html>
